@@ -1,6 +1,6 @@
 const { User } = require('../models');
 
-const getByUserId = async (userId) => {
+const getUserById = async (userId) => {
     const user = await User.findByPk(userId, { attributes: { exclude: ['password'] } });
     return user;
   };
@@ -24,7 +24,7 @@ const getByUserId = async (userId) => {
   };
 
 module.exports = {
-  getByUserId,
+  getUserById,
   createUser,
   getAllUsers,
 };

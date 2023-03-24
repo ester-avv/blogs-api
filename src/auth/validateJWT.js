@@ -25,7 +25,8 @@ const auth = async (req, res, next) => {
 
     req.user = user;
 } catch (err) {
-    return res.status(401).json({ message: err.message });
+     /* res.status(401).json({ message: err.message }); */
+    return res.status(401).json({ message: 'Expired or invalid token' });
 } 
 next();
 };
