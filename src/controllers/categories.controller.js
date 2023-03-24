@@ -12,11 +12,9 @@ const createCategory = async (req, res) => {
 
     /* console.log('ESSE É O RESULTADO', creatingNewCateg); */
 
-    return res.status(201).send(creatingNewCateg);
-    
-    
+    return res.status(201).send(creatingNewCateg);    
 };
 
 module.exports = {
     createCategory,
-}
+};
