@@ -17,4 +17,6 @@ userController.createUser);
 
 userRouter.get('/', auth, userController.getAllUsers);
 
+userRouter.get('/:id', auth, userController.getUserById);
+
 module.exports = userRouter; 
