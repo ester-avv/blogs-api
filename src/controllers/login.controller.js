@@ -1,7 +1,6 @@
- const loginService = require('../services/login.service'); 
 const jwt = require('jsonwebtoken');
+const loginService = require('../services/login.service'); 
 const { secret, jwtHeader } = require('../auth/validateJWT');
-
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -15,13 +14,11 @@ const login = async (req, res) => {
 /* console.log('esse é o loginUser', loginUser); */
  // autorização (jwt.sign)
     const token = jwt.sign({ 
-    data: { userId: loginUser.id } 
+    data: { userId: loginUser.id }, 
   }, secret, jwtHeader); 
 
   return res.status(200).send({ token });
 };
-
-
 
 module.exports = {
   login,

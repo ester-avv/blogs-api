@@ -20,18 +20,15 @@ const auth = async (req, res, next) => {
     const user = await userService.getUserById(decoded.data.userId);
 
     if (!user) {
-      return res.status(401).json({ message: 'Erro ao procurar usuário do token.' });
+      return res.status(401).json({ message: 'Expired or invalid token' });
     }
 
     req.user = user;
-
-} 
- catch (err) {
+} catch (err) {
     return res.status(401).json({ message: err.message });
 } 
 next();
 };
-
 
 // dica mentoria: criar uma forma de pegar o autor pelo token
 const userIdByToken = (authorization) => {
