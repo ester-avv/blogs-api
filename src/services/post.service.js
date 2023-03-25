@@ -11,9 +11,9 @@ const createPost = async (title, content, categoryIds, userId) => {
    if (!categoryIds.every((id) => categIdList.includes(id))) {
      return { type: 400, message: '"categoryIds" not found' };
    }  */
-   const promises = categoryIds.map((id) => Category.findOne({ where: { id } }));
-  const r = await Promise.all(promises);
-   if (r.some((e) => e == null)) { return { message: '"categoryIds" not found' }; } 
+   const promisesCategory = categoryIds.map((id) => Category.findOne({ where: { id } }));
+  const r = await Promise.all(promisesCategory);
+   if (r.some((e) => e === null)) { return { message: '"categoryIds" not found' }; } 
    const result = categoryIds
    .map((id) => PostCategory.create({ categoryId: id, postId: post.id }, { transaction: t }));
    await Promise.all(result);
