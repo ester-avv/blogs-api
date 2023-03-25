@@ -1,5 +1,6 @@
 const { BlogPost, sequelize, Category, PostCategory } = require('../models');
 
+// ajuda Gabriel 
 const createPost = async (title, content, categoryIds, userId) => {
   const t = await sequelize.transaction();
   const post = await BlogPost.create({ 
