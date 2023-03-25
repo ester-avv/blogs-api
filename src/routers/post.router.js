@@ -4,10 +4,12 @@ const { auth } = require('../auth/validateJWT');
 
 const postRouter = express.Router();
 
-/* postRouter.post('/', auth, postController.createPost); */
+ postRouter.post('/', auth, postController.createPost); 
 
  postRouter.get('/', auth, postController.getAllPostsOfUser); 
 
  postRouter.get('/:id', auth, postController.getPostById); 
+
+ postRouter.delete('/:id', auth, postController.deletePost);
 
 module.exports = postRouter; 

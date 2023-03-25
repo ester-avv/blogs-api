@@ -17,6 +17,7 @@ const createPost = async (title, content, categoryIds, userId) => {
    const result = categoryIds
    .map((id) => PostCategory.create({ categoryId: id, postId: post.id }, { transaction: t }));
    await Promise.all(result);
+   
    t.commit();
   return post;
 };
@@ -40,8 +41,17 @@ const getPostById = async (id) => {
  return postById;
 };
 
+const deletePost = async (id, userId) => {
+  const posts = await BlogPost.findByPk(id);
+  if (posts.dataValues.userId !== userId) {
+    return { message: 'Unauthorized user' };
+  }
+  await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
   createPost,
   getAllPostsOfUser,
   getPostById,
+  deletePost,
 };
