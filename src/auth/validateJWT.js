@@ -32,7 +32,7 @@ next();
 };
 
 // dica mentoria: criar uma forma de pegar o autor pelo token
-const userIdByToken = (authorization) => {
+const IdByToken = (authorization) => {
     const descriptBody = jwt.verify(authorization, secret);
     const { userId } = descriptBody.data;
     return userId;
@@ -42,5 +42,5 @@ module.exports = {
     secret,
     jwtHeader,
     auth,
-    userIdByToken,
+    IdByToken,
   };
