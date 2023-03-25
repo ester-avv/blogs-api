@@ -53,7 +53,7 @@ const deletePost = async (req, res) => {
   
  await postService.deletePost(postId, userId);
 
-  return res.status(204).end() 
+  return res.status(204).end(); 
 };
 
 module.exports = {
