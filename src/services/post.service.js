@@ -1,4 +1,4 @@
-const { BlogPost, sequelize, Category, PostCategory } = require('../models');
+const { BlogPost, sequelize, Category, PostCategory, User } = require('../models');
 
 // ajuda Gabriel --> nao funciona só com promiseAll, por isso esta listado duas vezes
 const createPost = async (title, content, categoryIds, userId) => {
@@ -6,11 +6,11 @@ const createPost = async (title, content, categoryIds, userId) => {
   const post = await BlogPost.create({ 
     title, content, userId, updated: Date.now(), published: Date.now(),
    }, { transaction: t });
-   const allCategories = await Category.findAll();
+ /*   const allCategories = await Category.findAll();
    const categIdList = allCategories.map(({ id: did }) => did);
    if (!categoryIds.every((id) => categIdList.includes(id))) {
      return { type: 400, message: '"categoryIds" not found' };
-   } 
+   }  */
    const promises = categoryIds.map((id) => Category.findOne({ where: { id } }));
   const r = await Promise.all(promises);
    if (r.some((e) => e == null)) { return { message: '"categoryIds" not found' }; } 
@@ -21,12 +21,16 @@ const createPost = async (title, content, categoryIds, userId) => {
   return post;
 };
 
-const getAllCategories = async () => {
-  const allCategories = await Category.findAll();
-  return allCategories;
+const getAllPostsOfUser = async () => {
+  const allPosts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } }],
+  });
+  return allPosts;
 };
 
 module.exports = {
   createPost,
-  getAllCategories,
+  getAllPostsOfUser,
 };

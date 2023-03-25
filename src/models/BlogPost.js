@@ -1,5 +1,3 @@
-'use strict';
-
 const BlogPost = (sequelize, DataTypes) => {
   const blogpost = sequelize.define('BlogPost', {
     id: {
@@ -19,7 +17,13 @@ const BlogPost = (sequelize, DataTypes) => {
   });
 
   blogpost.associate = (models) => {
-    blogpost.belongsTo(models.User, { foreignKey: 'userId', as: 'user' })
+    blogpost.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    blogpost.belongsToMany(models.Category, {
+      as: 'categories',
+      through: 'posts_categories',
+      foreignKey: 'postId',
+      otherKey: 'categoryId',
+    });
   }
   return blogpost;
 };

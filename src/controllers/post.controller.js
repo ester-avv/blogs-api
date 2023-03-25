@@ -21,15 +21,12 @@ const createPost = async (req, res) => {
     return res.status(201).send(creatingNewPost);    
 };
 
-const getAllPosts = async (req, res) => {
-    const result = await postService.getAllCategories();
-
-   /*  const listCategories = result.map((e)=> { e.id, e.name }) */
-      console.log('ESSE É O RESULTADO', result); 
+const getAllPostsOfUser = async (req, res) => {
+    const result = await postService.getAllPostsOfUser(); 
     return res.status(200).json(result);
 };
 
 module.exports = {
   createPost,
-  getAllPosts,
+  getAllPostsOfUser,
 };

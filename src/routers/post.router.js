@@ -6,6 +6,6 @@ const postRouter = express.Router();
 
 postRouter.post('/', auth, postController.createPost);
 
-/* postRouter.get('/', auth, postController.getAllCategories);  */
+ postRouter.get('/', auth, postController.getAllPostsOfUser); 
 
 module.exports = postRouter; 
