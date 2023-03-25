@@ -1,6 +1,6 @@
 const { BlogPost, sequelize, Category, PostCategory } = require('../models');
 
-// ajuda Gabriel 
+// ajuda Gabriel --> nao funciona só com promiseAll, por isso esta listado duas vezes
 const createPost = async (title, content, categoryIds, userId) => {
   const t = await sequelize.transaction();
   const post = await BlogPost.create({ 
