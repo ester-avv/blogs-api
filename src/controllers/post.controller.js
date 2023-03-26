@@ -10,7 +10,7 @@ const createPost = async (req, res) => {
         return res.status(400).send({
           message: 'Some required fields are missing',
         });
-      }
+      } 
       
     const creatingNewPost = await postService.createPost(title, content, categoryIds, userId);
 
@@ -18,7 +18,7 @@ const createPost = async (req, res) => {
       return res.status(400).json({ message: 'one or more "categoryIds" not found' });
     }
 
-    return res.status(201).send(creatingNewPost);    
+    return res.status(201).json(creatingNewPost);    
 };
 
 const getAllPostsOfUser = async (req, res) => {
