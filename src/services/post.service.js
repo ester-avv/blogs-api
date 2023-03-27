@@ -1,25 +1,30 @@
 const { BlogPost, sequelize, Category, PostCategory, User } = require('../models');
 
+const checkCatId = require('../utils/checkCatId');
 // ajuda Gabriel --> nao funciona só com promiseAll, por isso esta listado duas vezes
-const createPost = async (title, content, categoryIds, userId) => {
-  /* const t = await sequelize.transaction(); */
-  const post = await BlogPost.create({ 
-    title, content, userId, updated: Date.now(), published: Date.now(),
-   });
-   const allCategories = await Category.findAll();
-   const categIdList = allCategories.map(({ id: did }) => did);
-   if (!categoryIds.every((id) => categIdList.includes(id))) {
-     return {  message: '"categoryIds" not found' };
-   }  
-  /*  const promisesCategory = categoryIds.map((id) => Category.findOne({ where: { id } }));
-  const r = await Promise.all(promisesCategory);
-   if (r.some((e) => e === null)) { return { message: '"categoryIds" not found' }; } 
-   const result = categoryIds
-   .map((id) => PostCategory.create({ categoryId: id, postId: post.id }, { transaction: t }));
-   await Promise.all(result); 
-  */
-   
-  return post;
+// ajuda turma 24
+const createPost = async (title, content, idsCategories, userId) => {
+  const t = await sequelize.transaction();
+  const validCat = await checkCatId(idsCategories);
+  if (!validCat) return { message: 'one or more "categoryIds" not found' };
+
+  try {
+    const published = new Date();
+    const newPost = await BlogPost.create(
+      { title, content, userId, published, updated: published }, { transaction: t },
+    );
+  
+    await idsCategories.forEach(async (category) => {
+      await PostCategory.create({ postId: newPost.id, categoryId: category });
+    }, { transaction: t });
+
+    await t.commit();
+
+    return newPost;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
 };
 
 const getAllPostsOfUser = async () => {
