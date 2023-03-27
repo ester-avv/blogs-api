@@ -1,13 +1,14 @@
+const { Op } = require('sequelize');
 const { BlogPost, sequelize, Category, PostCategory, User } = require('../models');
 
 const checkCatId = require('../utils/checkCatId');
-// ajuda Gabriel --> nao funciona só com promiseAll, por isso esta listado duas vezes
+// ajuda Gabriel --> tem que usar promiseAll no check das categorias
 // ajuda turma 24
 const createPost = async (title, content, idsCategories, userId) => {
   const t = await sequelize.transaction();
   const validCat = await checkCatId(idsCategories);
   if (!validCat) return { message: 'one or more "categoryIds" not found' };
-
+// usando try e catch com transaction 
   try {
     const published = new Date();
     const newPost = await BlogPost.create(
@@ -54,9 +55,28 @@ const deletePost = async (id, userId) => {
   await BlogPost.destroy({ where: { id } });
 };
 
+const searchPost = async (searchTerm) => {
+  // usando o findAll vai retornar todos se a busca é vazia
+  const foundPost = await BlogPost.findAll({
+    where: { 
+      [Op.or]: [
+        { title: { [Op.substring]: searchTerm } },
+        { content: { [Op.substring]: searchTerm } },
+      ],
+    },
+    include: [
+      { model: Category, as: 'categories', through: { attributes: [] } },
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+    ],
+  });
+
+  return foundPost;
+};
+
 module.exports = {
   createPost,
   getAllPostsOfUser,
   getPostById,
   deletePost,
+  searchPost,
 };

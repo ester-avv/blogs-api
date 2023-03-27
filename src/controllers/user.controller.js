@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service'); 
-const { secret, jwtHeader } = require('../auth/validateJWT');
+const { secret, jwtHeader, IdByToken } = require('../auth/validateJWT');
 
-// req 4 criar user
+// req 4 criar user tem que fazer o sign 
  const createUser = async (req, res) => {
     const { displayName, email, password, image } = req.body;
     
@@ -32,8 +32,17 @@ const { secret, jwtHeader } = require('../auth/validateJWT');
     return res.status(200).json(user);
  };
 
+ const deleteUser = async (req, res) => {
+    const { authorization } = req.headers;
+    const userId = IdByToken(authorization);
+
+    await userService.deleteUser(userId);
+    return res.status(204).end();
+ };
+
 module.exports = { 
     createUser,
     getAllUsers,
+    deleteUser,
     getUserById,
 };
